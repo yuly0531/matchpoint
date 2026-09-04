@@ -2,6 +2,17 @@ import { useState } from 'react';
 import { formatPhoneNumber, isValidPhoneNumber, normalizePhoneNumber } from '../phone';
 
 const API_BASE_URL = (process.env.REACT_APP_API_BASE_URL || '').replace(/\/$/, '');
+const NAME_PATTERN = /^[가-힣A-Za-z]+$/;
+const EMAIL_PATTERN = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$/;
+const PASSWORD_ASCII_PATTERN = /^[\x21-\x7E]+$/;
+
+function sanitizeEmailInput(value) {
+  return value.replace(/[^\x21-\x7E]/g, '').slice(0, 100);
+}
+
+function sanitizeNameInput(value) {
+  return value.replace(/\s/g, '').slice(0, 20);
+}
 
 async function requestSignUp(payload) {
   const response = await fetch(`${API_BASE_URL}/api/auth/email`, {
@@ -20,30 +31,46 @@ async function requestSignUp(payload) {
 
 function validate(form) {
   const errors = {};
+  const normalizedName = form.name.trim();
+  const normalizedEmail = form.email.trim();
 
-  if (!form.name.trim()) {
+  if (!normalizedName) {
     errors.name = '이름을 입력해 주세요.';
+  } else if (normalizedName.length < 2 || normalizedName.length > 20) {
+    errors.name = '이름은 2~20자로 입력해 주세요.';
+  } else if (!NAME_PATTERN.test(normalizedName)) {
+    errors.name = '이름에는 공백 없이 한글 또는 영문만 사용할 수 있어요.';
   }
 
-  if (!form.email.trim()) {
+  if (!normalizedEmail) {
     errors.email = '이메일을 입력해 주세요.';
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+  } else if (
+    normalizedEmail.length > 100
+    || normalizedEmail.includes('..')
+    || !EMAIL_PATTERN.test(normalizedEmail)
+  ) {
     errors.email = '올바른 이메일 형식이 아니에요.';
   }
 
   if (!form.phone.trim()) {
     errors.phone = '휴대폰 번호를 입력해 주세요.';
   } else if (!isValidPhoneNumber(form.phone)) {
-    errors.phone = '010으로 시작하는 휴대폰 번호 11자리를 입력해 주세요.';
+    errors.phone = '01로 시작하는 휴대폰 번호 10~11자리를 입력해 주세요.';
   }
 
   if (!form.password) {
     errors.password = '비밀번호를 입력해 주세요.';
-  } else if (form.password.length < 8) {
-    errors.password = '비밀번호는 8자 이상이어야 해요.';
+  } else if (form.password.length < 8 || form.password.length > 20) {
+    errors.password = '비밀번호는 8~20자로 입력해 주세요.';
+  } else if (!PASSWORD_ASCII_PATTERN.test(form.password)) {
+    errors.password = '비밀번호에는 공백이나 한글을 사용할 수 없어요.';
+  } else if (!/[A-Za-z]/.test(form.password) || !/\d/.test(form.password)) {
+    errors.password = '비밀번호에 영문과 숫자를 모두 포함해 주세요.';
   }
 
-  if (form.confirmPassword !== form.password) {
+  if (!form.confirmPassword) {
+    errors.confirmPassword = '비밀번호를 한 번 더 입력해 주세요.';
+  } else if (form.confirmPassword !== form.password) {
     errors.confirmPassword = '비밀번호가 일치하지 않아요.';
   }
 
@@ -59,10 +86,25 @@ function SignUpPage({ onNavigate }) {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+    const nextValue = name === 'phone'
+      ? formatPhoneNumber(value)
+      : name === 'email'
+        ? sanitizeEmailInput(value)
+        : name === 'name'
+          ? sanitizeNameInput(value)
+          : value;
+
     setForm((prev) => ({
       ...prev,
-      [name]: name === 'phone' ? formatPhoneNumber(value) : value,
+      [name]: nextValue,
     }));
+    setErrors((prev) => {
+      if (!prev[name]) return prev;
+      const next = { ...prev };
+      delete next[name];
+      return next;
+    });
+    setServerError('');
   };
 
   const handleSubmit = async (event) => {
@@ -75,10 +117,10 @@ function SignUpPage({ onNavigate }) {
     setIsSubmitting(true);
     try {
       await requestSignUp({
-        email: form.email,
+        email: form.email.trim().toLowerCase(),
         phone: normalizePhoneNumber(form.phone),
         password: form.password,
-        name: form.name,
+        name: form.name.trim(),
       });
       setIsDone(true);
     } catch (error) {
@@ -120,28 +162,28 @@ function SignUpPage({ onNavigate }) {
         <form className="login-form" onSubmit={handleSubmit} noValidate>
           <label className="input-group">
             <span>이름</span>
-            <input name="name" type="text" value={form.name} onChange={handleChange} placeholder="이름을 입력해 주세요" autoComplete="name" />
-            {errors.name && <p className="social-error" role="alert">{errors.name}</p>}
+            <input name="name" type="text" minLength="2" maxLength="20" value={form.name} onChange={handleChange} placeholder="이름을 입력해 주세요" autoComplete="name" aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? 'signup-name-error' : undefined} />
+            {errors.name && <p id="signup-name-error" className="social-error" role="alert">{errors.name}</p>}
           </label>
           <label className="input-group">
             <span>이메일</span>
-            <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="이메일을 입력해 주세요" autoComplete="email" />
-            {errors.email && <p className="social-error" role="alert">{errors.email}</p>}
+            <input name="email" type="email" inputMode="email" maxLength="100" value={form.email} onChange={handleChange} placeholder="이메일을 입력해 주세요" autoComplete="email" aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? 'signup-email-error' : undefined} />
+            {errors.email && <p id="signup-email-error" className="social-error" role="alert">{errors.email}</p>}
           </label>
           <label className="input-group">
             <span>휴대폰 번호</span>
-            <input name="phone" type="tel" inputMode="numeric" value={form.phone} onChange={handleChange} placeholder="010-0000-0000" autoComplete="tel" />
-            {errors.phone && <p className="social-error" role="alert">{errors.phone}</p>}
+            <input name="phone" type="tel" inputMode="numeric" maxLength="13" value={form.phone} onChange={handleChange} placeholder="010-0000-0000" autoComplete="tel" aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'signup-phone-error' : undefined} />
+            {errors.phone && <p id="signup-phone-error" className="social-error" role="alert">{errors.phone}</p>}
           </label>
           <label className="input-group">
-            <span>비밀번호</span>
-            <input name="password" type="password" value={form.password} onChange={handleChange} placeholder="8자 이상 입력해 주세요" autoComplete="new-password" />
-            {errors.password && <p className="social-error" role="alert">{errors.password}</p>}
+            <span>비밀번호 <small>(영문+숫자 8~20자)</small></span>
+            <input name="password" type="password" minLength="8" maxLength="20" value={form.password} onChange={handleChange} placeholder="영문과 숫자를 포함해 주세요" autoComplete="new-password" aria-invalid={Boolean(errors.password)} aria-describedby={errors.password ? 'signup-password-error' : undefined} />
+            {errors.password && <p id="signup-password-error" className="social-error" role="alert">{errors.password}</p>}
           </label>
           <label className="input-group">
             <span>비밀번호 확인</span>
-            <input name="confirmPassword" type="password" value={form.confirmPassword} onChange={handleChange} placeholder="비밀번호를 다시 입력해 주세요" autoComplete="new-password" />
-            {errors.confirmPassword && <p className="social-error" role="alert">{errors.confirmPassword}</p>}
+            <input name="confirmPassword" type="password" minLength="8" maxLength="20" value={form.confirmPassword} onChange={handleChange} placeholder="비밀번호를 다시 입력해 주세요" autoComplete="new-password" aria-invalid={Boolean(errors.confirmPassword)} aria-describedby={errors.confirmPassword ? 'signup-confirm-password-error' : undefined} />
+            {errors.confirmPassword && <p id="signup-confirm-password-error" className="social-error" role="alert">{errors.confirmPassword}</p>}
           </label>
           <button type="submit" className="login-button" disabled={isSubmitting}>
             {isSubmitting ? '가입 중...' : '회원가입'}
