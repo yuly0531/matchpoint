@@ -324,6 +324,22 @@ h1 { margin-bottom: 8px; font-size: 26px; line-height: 1.35; letter-spacing: -0.
 .monthly-record-list > article div { display: grid; justify-items: end; gap: 3px; }
 .monthly-record-list > article strong { color: var(--blue-700); font-size: 13px; }
 .monthly-record-list > article small { color: var(--muted); font-size: 8px; }
+.records-load-more {
+  width: 100%;
+  margin-top: 8px;
+  padding: 11px 14px;
+  border: 1px solid #cfe1fb;
+  border-radius: 14px;
+  background: var(--blue-50);
+  color: var(--blue-700);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.records-load-more span { color: var(--muted); font-size: 9px; font-weight: 700; }
+.records-load-more:hover { background: #e7f2ff; }
+.records-load-more:focus-visible { outline: 3px solid rgba(47, 128, 237, .22); outline-offset: 2px; }
 .monthly-report-empty { display: grid; justify-items: center; gap: 8px; padding: 34px 18px; border-radius: 24px; background: var(--blue-50); text-align: center; }
 .monthly-report-empty > span { font-size: 30px; color: var(--blue-500); }
 .monthly-report-empty h2 { margin: 0; font-size: 17px; }
@@ -852,6 +868,8 @@ h1 { margin-bottom: 8px; font-size: 26px; line-height: 1.35; letter-spacing: -0.
   flex-direction: column;
   gap: 10px;
 }
+
+.history-load-more { margin-top: 12px; }
 
 .history-item {
   width: 100%;

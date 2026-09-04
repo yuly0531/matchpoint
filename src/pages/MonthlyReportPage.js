@@ -14,6 +14,8 @@ import { buildMonthlyReportData, previousMonthKey } from '../monthlyReportData';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Filler);
 
+const RECORDS_PER_PAGE = 10;
+
 const monthlyChartOptions = {
   responsive: true,
   maintainAspectRatio: false,
@@ -48,6 +50,11 @@ function MonthlyReportPage({ onNavigate, onBack, token, selectedChildId, reportM
   const [childName, setChildName] = useState('자녀');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [visibleRecordCount, setVisibleRecordCount] = useState(RECORDS_PER_PAGE);
+
+  useEffect(() => {
+    setVisibleRecordCount(RECORDS_PER_PAGE);
+  }, [activeMonth, selectedChildId]);
 
   useEffect(() => {
     if (!token) {
@@ -93,6 +100,8 @@ function MonthlyReportPage({ onNavigate, onBack, token, selectedChildId, reportM
       fill: true,
     }],
   }), [report.trend]);
+  const visibleRecords = report.records.slice(0, visibleRecordCount);
+  const hasMoreRecords = visibleRecordCount < report.records.length;
 
   return (
     <section className="phone">
@@ -141,12 +150,21 @@ function MonthlyReportPage({ onNavigate, onBack, token, selectedChildId, reportM
 
             <section className="monthly-record-list">
               <div className="card-head"><h2>이달의 촬영 기록</h2><span>{report.scanCount}회</span></div>
-              {report.records.map((record) => (
+              {visibleRecords.map((record) => (
                 <article key={record.id}>
                   <span>{record.dateLabel}</span>
                   <div><strong>{record.displayScore}점</strong><small>{record.cavity_count > 0 ? `충치 의심 ${record.cavity_count}곳` : '주의 부위 없음'}</small></div>
                 </article>
               ))}
+              {hasMoreRecords && (
+                <button
+                  type="button"
+                  className="records-load-more"
+                  onClick={() => setVisibleRecordCount((count) => count + RECORDS_PER_PAGE)}
+                >
+                  더보기 <span>({Math.min(visibleRecordCount, report.records.length)}/{report.records.length})</span>
+                </button>
+              )}
             </section>
           </>
         )}

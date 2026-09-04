@@ -1,6 +1,8 @@
 {
   "short_name": "SmileGuard",
   "name": "SmileGuard 어린이의 구강 건강을 담당합니다",
+  "lang": "ko-KR",
+  "dir": "ltr",
   "icons": [
     {
       "src": "Gom.ico",

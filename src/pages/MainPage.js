@@ -151,8 +151,7 @@ function MainPage({ onNavigate, user, token, selectedChildId, onSelectChild }) {
             className="camera-start"
             onClick={() => selectedChild ? onNavigate('pre-capture') : onNavigate('child-profile')}
             aria-label="촬영 시작"
-          >
-            ◎
+          >📷
           </button>
           <h2>{selectedChild ? `${selectedChild.name} 구강 촬영` : '자녀 프로필을 등록해 주세요'}</h2>
           <p>{selectedChild

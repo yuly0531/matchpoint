@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { apiFetch, apiFetchBlob } from '../api';
 
+const RECORDS_PER_PAGE = 10;
+
 function scoreTone(score) {
   return score >= 80 ? 'good' : 'watch';
 }
@@ -33,6 +35,7 @@ function HistoryPage({ onNavigate, onBack, token, selectedChildId, onSelectChild
   const [isLoadingChildren, setIsLoadingChildren] = useState(true);
   const [isLoadingRecords, setIsLoadingRecords] = useState(false);
   const [error, setError] = useState('');
+  const [visibleRecordCount, setVisibleRecordCount] = useState(RECORDS_PER_PAGE);
 
   useEffect(() => {
     if (!token) {
@@ -69,6 +72,7 @@ function HistoryPage({ onNavigate, onBack, token, selectedChildId, onSelectChild
     }
     let cancelled = false;
     setSelectedRecord(null);
+    setVisibleRecordCount(RECORDS_PER_PAGE);
     setIsLoadingRecords(true);
     apiFetch(`/api/history?child_id=${activeChildId}`, { token })
       .then((data) => {
@@ -141,6 +145,8 @@ function HistoryPage({ onNavigate, onBack, token, selectedChildId, onSelectChild
   };
 
   const selectedChild = children.find((child) => child.id === activeChildId);
+  const visibleRecords = records.slice(0, visibleRecordCount);
+  const hasMoreRecords = visibleRecordCount < records.length;
 
   return (
     <section className="phone">
@@ -228,7 +234,7 @@ function HistoryPage({ onNavigate, onBack, token, selectedChildId, onSelectChild
 
             {!isLoadingRecords && records.length > 0 && (
               <ul className="history-list">
-                {records.map((record) => (
+                {visibleRecords.map((record) => (
                   <li key={record.id}>
                     <button
                       type="button"
@@ -255,6 +261,16 @@ function HistoryPage({ onNavigate, onBack, token, selectedChildId, onSelectChild
                   </li>
                 ))}
               </ul>
+            )}
+
+            {!isLoadingRecords && hasMoreRecords && (
+              <button
+                type="button"
+                className="records-load-more history-load-more"
+                onClick={() => setVisibleRecordCount((count) => count + RECORDS_PER_PAGE)}
+              >
+                더보기 <span>({Math.min(visibleRecordCount, records.length)}/{records.length})</span>
+              </button>
             )}
           </>
         )}

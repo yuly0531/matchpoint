@@ -260,7 +260,7 @@ function ReportPage({ onNavigate, onBack, token, selectedChildId }) {
       <nav className="bottom-nav">
         <button className="nav-item" onClick={() => onNavigate('home')}><span>⌂</span>홈</button>
         <button className="nav-item active"><span>▥</span>리포트</button>
-        <button className="nav-item" onClick={() => onNavigate('pre-capture')}><span>◎</span>촬영</button>
+        <button className="nav-item" onClick={() => onNavigate('mypage')}><span>●</span>관리</button>
       </nav>
     </section>
   );
