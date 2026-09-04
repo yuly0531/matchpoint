@@ -18,7 +18,6 @@ import ChildProfilePage from './pages/ChildProfilePage';
 import CareGuidePage from './pages/CareGuidePage';
 import PreCapturePage from './pages/PreCapturePage';
 import MonthlyReportPage from './pages/MonthlyReportPage';
-import ColorAnalysisTestPage from './pages/ColorAnalysisTestPage';
 
 function App() {
   const savedSession = (() => {
@@ -187,7 +186,6 @@ function App() {
     profile: <ProfilePage onNavigate={navigate} onBack={() => goBack('mypage')} user={session?.user} provider={session?.provider} token={session?.accessToken} onUserUpdate={handleUserUpdate} />,
     'child-profile': <ChildProfilePage onNavigate={navigate} onBack={() => goBack('mypage')} token={session?.accessToken} selectedChildId={selectedChildId} onSelectChild={handleSelectChild} />,
     'care-guide': <CareGuidePage onNavigate={navigate} onBack={() => goBack('home')} />,
-    'color-test': <ColorAnalysisTestPage onNavigate={navigate} onBack={() => goBack('mypage')} token={session?.accessToken} selectedChildId={selectedChildId} />,
     'pre-capture': <PreCapturePage onNavigate={navigate} onBack={() => goBack('home')} token={session?.accessToken} selectedChildId={selectedChildId} />,
     camera: <CameraPage onNavigate={navigate} onBack={() => goBack('home')} onCapture={handleCapture} token={session?.accessToken} selectedChildId={selectedChildId} />,
     preview: <CapturePreviewPage onNavigate={navigate} onBack={() => goBack('camera')} capturedUrl={capturedUrl} />,

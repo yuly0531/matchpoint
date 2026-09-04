@@ -311,7 +311,7 @@ h1 { margin-bottom: 8px; font-size: 26px; line-height: 1.35; letter-spacing: -0.
 .monthly-trend-card .card-head > span,
 .monthly-record-list .card-head > span { color: var(--blue-700); font-size: 9px; font-weight: 800; }
 .monthly-trend-chart { position: relative; height: 180px; margin-top: 14px; }
-.monthly-metric-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+.monthly-metric-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 14px; }
 .monthly-metric-grid article { display: grid; justify-items: center; min-width: 0; padding: 15px 7px; border-radius: 17px; background: var(--blue-50); text-align: center; }
 .monthly-metric-grid span { color: var(--muted); font-size: 9px; }
 .monthly-metric-grid strong { margin: 6px 0 3px; color: var(--blue-500); font-size: 21px; }
@@ -1133,11 +1133,6 @@ h1 { margin-bottom: 8px; font-size: 26px; line-height: 1.35; letter-spacing: -0.
 .attention-banner > span { display: grid; place-items: center; width: 31px; height: 31px; flex: 0 0 auto; border-radius: 50%; background: #f39a3d; color: white; font-weight: 900; }
 .attention-banner strong { font-size: 13px; }
 .attention-banner p { margin: 4px 0 0; font-size: 11px; line-height: 1.45; }
-.metric-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-bottom: 18px; }
-.metric-tabs button { display: grid; justify-items: center; gap: 3px; min-height: 48px; padding: 9px 5px; border: 1px solid var(--line); border-radius: 14px; background: white; color: var(--muted); cursor: pointer; font-size: 10px; font-weight: 800; }
-.metric-tabs button.active { border-color: #9cc8ff; background: var(--blue-50); color: var(--blue-700); box-shadow: 0 5px 14px rgba(23,105,210,.08); }
-.metric-tabs button:disabled { cursor: not-allowed; opacity: .58; }
-.metric-tabs button small { color: #9aa4b4; font-size: 8px; font-weight: 700; }
 .period > div:first-child p { margin: 4px 0 0; color: var(--muted); font-size: 11px; }
 .range-tabs { display: flex; padding: 3px; border-radius: 12px; background: var(--blue-50); }
 .range-tabs button { border: 0; border-radius: 10px; padding: 8px 9px; background: transparent; color: var(--muted); cursor: pointer; font-size: 10px; font-weight: 800; }
@@ -1209,9 +1204,6 @@ h1 { margin-bottom: 8px; font-size: 26px; line-height: 1.35; letter-spacing: -0.
 .weekday-picker button.active { border-color: var(--blue-500); background: var(--blue-500); color: white; box-shadow: 0 4px 10px rgba(36, 126, 255, .24); }
 .weekday-picker button:disabled { cursor: wait; opacity: .55; }
 .child-feedback-preference { margin-top: 14px; background: white; }
-.child-baseline-status { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 34px; padding: 8px 11px; border-radius: 11px; background: #f6f9fd; }
-.child-baseline-status span { color: var(--ink); font-size: 10px; font-weight: 800; }
-.child-baseline-status small { color: var(--blue-700); font-size: 9px; font-weight: 800; }
 .child-profile-form { display: grid; gap: 15px; margin-top: 20px; padding: 20px; border: 1px solid var(--line); border-radius: 22px; }
 .child-profile-form h2 { margin: 0; font-size: 16px; }
 .input-group span small { color: var(--muted); font-weight: 600; }

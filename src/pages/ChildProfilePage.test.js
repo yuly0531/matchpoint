@@ -50,7 +50,7 @@ test('모든 자녀에게 적용되는 캐릭터 피드백 토글을 한 번만 
   expect(toggle).not.toBeChecked();
   expect(isCharacterFeedbackEnabled()).toBe(false);
   expect(screen.getByRole('status')).toHaveTextContent('모든 자녀');
-  expect(screen.getByText('치아 색상 2/3 · 잇몸 색상 1/3')).toBeInTheDocument();
+  expect(screen.queryByText(/치아 색상/)).not.toBeInTheDocument();
 });
 
 test('첫 번째 자녀는 보호하고 두 번째 자녀부터 삭제할 수 있다', async () => {

@@ -43,7 +43,6 @@ export function buildMonthlyReportData(records, selectedMonth) {
   const previousRecords = normalized.filter((record) => record.monthKey === previousMonth);
   const overallAverage = average(selectedRecords.map((record) => record.score ?? record.overall_score));
   const previousAverage = average(previousRecords.map((record) => record.score ?? record.overall_score));
-  const personalColorRecords = selectedRecords.filter((record) => record.color_baseline_source === 'personal');
 
   const dailyGroups = new Map();
   selectedRecords.forEach((record) => {
@@ -68,8 +67,6 @@ export function buildMonthlyReportData(records, selectedMonth) {
     scoreChange: overallAverage != null && previousAverage != null
       ? overallAverage - previousAverage
       : null,
-    yellowingAverage: average(personalColorRecords.map((record) => record.yellowing_index)),
-    gumAverage: average(personalColorRecords.map((record) => record.gum_inflammation_index)),
     cavityCount: selectedRecords.reduce((sum, record) => sum + Number(record.cavity_count || 0), 0),
     trend: {
       labels: dailyTrend.map((group) => `${group.parts.month}/${group.parts.day}`),

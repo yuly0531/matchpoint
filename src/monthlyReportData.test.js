@@ -10,8 +10,8 @@ test('선택한 월의 촬영 기록과 전달 대비를 집계한다', () => {
   expect(report.scanCount).toBe(2);
   expect(report.overallAverage).toBe(95);
   expect(report.scoreChange).toBe(5);
-  expect(report.yellowingAverage).toBe(85);
-  expect(report.gumAverage).toBe(95);
+  expect(report.yellowingAverage).toBeUndefined();
+  expect(report.gumAverage).toBeUndefined();
   expect(report.trend.labels).toEqual(['7/5', '7/12']);
 });
 

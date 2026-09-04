@@ -235,13 +235,6 @@ function ChildProfilePage({ onNavigate, onBack, token, selectedChildId, onSelect
                     </div>
                   )}
 
-                  <div className="child-baseline-status">
-                    <span>맞춤 비교 준비</span>
-                    <small>
-                      치아 색상 {child.colorBaseline?.yellowingSampleCount ?? 0}/3 · 잇몸 색상 {child.colorBaseline?.gumSampleCount ?? 0}/3
-                    </small>
-                  </div>
-
                 </article>
               );
             })}

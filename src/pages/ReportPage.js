@@ -67,7 +67,7 @@ function yearComparisonCopy(change) {
 function ReportPage({ onNavigate, onBack, token, selectedChildId }) {
   const [summary, setSummary] = useState(null);
   const [range, setRange] = useState('weekly');
-  const [metric, setMetric] = useState('overall');
+  const metric = 'overall';
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -85,8 +85,6 @@ function ReportPage({ onNavigate, onBack, token, selectedChildId }) {
 
   const metricOptions = [
     summary?.metrics?.overall || { key: 'overall', label: '종합 점수', unit: '점', available: true },
-    summary?.metrics?.yellowing || { key: 'yellowing', label: '황변 변화', unit: '점', available: false },
-    summary?.metrics?.gum || { key: 'gum', label: '잇몸 변화', unit: '점', available: false },
   ];
   const activeMetric = summary?.metrics?.[metric] || metricOptions.find((item) => item.key === metric);
   const trend = range === 'weekly'
@@ -172,23 +170,6 @@ function ReportPage({ onNavigate, onBack, token, selectedChildId }) {
         {summary?.attention_required && (
           <div className="attention-banner"><span>!</span><div><strong>점수 하락이 감지됐어요</strong><p>같은 환경에서 다시 촬영하고 변화가 계속되면 치과 상담을 권장해요.</p></div></div>
         )}
-
-        <div className="metric-tabs" role="tablist" aria-label="분석 지표">
-          {metricOptions.map((option) => (
-            <button
-              type="button"
-              key={option.key}
-              className={metric === option.key ? 'active' : ''}
-              role="tab"
-              aria-selected={metric === option.key}
-              disabled={!option.available}
-              onClick={() => setMetric(option.key)}
-            >
-              <span>{option.label}</span>
-              {!option.available && <small>준비 중</small>}
-            </button>
-          ))}
-        </div>
 
         <div className="period">
           <div><h2>변화 그래프</h2><p>{changeLabel}</p></div>
