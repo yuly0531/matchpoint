@@ -36,6 +36,8 @@ test('알림에서 선택한 월의 상세 리포트를 표시한다', async () 
   expect(screen.getByTestId('monthly-chart')).toHaveTextContent('7/5,7/12');
   expect(screen.getByText('7월 12일')).toBeInTheDocument();
   expect(screen.getByText('7월 5일')).toBeInTheDocument();
+  expect(screen.queryByText('치아 색상')).not.toBeInTheDocument();
+  expect(screen.queryByText('잇몸 상태')).not.toBeInTheDocument();
 });
 
 test('이달의 촬영 기록을 10개씩 더 보여준다', async () => {

@@ -25,7 +25,6 @@ function MyPage({ onNavigate, onBack, onLogout, user, token, provider, selectedC
     { icon: '⏱', title: '촬영 히스토리', description: '자녀별 촬영 기록을 확인해요', onClick: () => onNavigate('history') },
     { icon: '⚙️', title: '알림 설정', description: '맞춤 촬영 일정과 상태 알림을 관리해요', onClick: () => onNavigate('notification') },
     { icon: '✦', title: '촬영·위생 가이드', description: '위생 커버와 촬영 방법을 확인해요', onClick: () => onNavigate('care-guide') },
-    { icon: '◫', title: '색상 분석 테스트', description: '전처리별 LAB·HSV 점수 변동을 비교해요', onClick: () => onNavigate('color-test') },
   ];
 
   return (

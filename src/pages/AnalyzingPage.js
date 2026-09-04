@@ -61,7 +61,7 @@ function AnalyzingPage({ onNavigate, capturedBlob, token, selectedChildId, onAna
       <p className="eyebrow">AI ANALYSIS</p>
       <h1>구강 상태를 분석하고 있어요</h1>
       <p className="subtext">
-        치아 영역과 잇몸 색상을 확인 중입니다.
+        치아 영역과 충치 의심 부위를 확인 중입니다.
         <br />
         잠시만 기다려 주세요.
       </p>

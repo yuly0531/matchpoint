@@ -7,7 +7,6 @@ jest.mock('react-chartjs-2', () => ({
   Line: ({ data }) => <div data-testid="trend-chart">{data.labels.join(',')}</div>,
 }));
 
-const emptyTrend = { labels: [], scores: [], scan_counts: [] };
 const metricBase = {
   key: 'overall',
   label: '종합 점수',
@@ -40,8 +39,6 @@ beforeEach(() => {
     yearly_trend: metricBase.yearly_trend,
     metrics: {
       overall: metricBase,
-      yellowing: { ...metricBase, key: 'yellowing', label: '황변 변화', available: false, recorded_days: 0, weekly_trend: emptyTrend, monthly_trend: emptyTrend, yearly_trend: emptyTrend },
-      gum: { ...metricBase, key: 'gum', label: '잇몸 변화', available: false, recorded_days: 0, weekly_trend: emptyTrend, monthly_trend: emptyTrend, yearly_trend: emptyTrend },
     },
     year_comparison: { available: false, days_remaining: 300 },
   });
@@ -55,8 +52,8 @@ test('이번 달 평균과 전월 대비를 표시하고 6개월 그래프를 �
   });
   expect(screen.getByText('이번 달 평균')).toBeInTheDocument();
   expect(screen.getByText('전월 대비')).toBeInTheDocument();
-  expect(screen.getByRole('tab', { name: /황변 변화/ })).toBeDisabled();
-  expect(screen.getByRole('tab', { name: /잇몸 변화/ })).toBeDisabled();
+  expect(screen.queryByText('황변 변화')).not.toBeInTheDocument();
+  expect(screen.queryByText('잇몸 변화')).not.toBeInTheDocument();
 
   fireEvent.click(screen.getByRole('button', { name: '최근 6개월' }));
   expect(screen.getByTestId('trend-chart')).toHaveTextContent('7월,8월');

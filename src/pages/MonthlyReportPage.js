@@ -143,8 +143,6 @@ function MonthlyReportPage({ onNavigate, onBack, token, selectedChildId, reportM
             </article>
 
             <section className="monthly-metric-grid">
-              <article><span>치아 색상</span><strong>{report.yellowingAverage ?? '--'}</strong><small>{report.yellowingAverage == null ? '맞춤 기준 설정 중' : '점 평균'}</small></article>
-              <article><span>잇몸 상태</span><strong>{report.gumAverage ?? '--'}</strong><small>{report.gumAverage == null ? '맞춤 기준 설정 중' : '점 평균'}</small></article>
               <article><span>충치 의심</span><strong className={report.cavityCount > 0 ? 'watch' : ''}>{report.cavityCount}</strong><small>누적 부위</small></article>
             </section>
 
